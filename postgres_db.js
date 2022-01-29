@@ -1,3 +1,4 @@
+const { text } = require('body-parser');
 const { Pool } = require('pg');
 require('dotenv').config();
 const Cursor = require('pg-cursor')
@@ -16,12 +17,16 @@ pool.on('error', (err, client) => {
     console.error('Error:', err);
 });
 
+const b1_query = `select match_id, season_year, e.team_name as team1, f.team_name as team2, venue_name, city_name from match
+ left join team as e on team1= e.team_id left join team as f on team2 = f.team_id left join venue on match.venue_id = venue.venue_id 
+ order by season_year DESC offset $1 limit $2;`
 
-const getMatches = (request, response) => {
-    const skip = request.query.skip;
+
+const getMatches = function (request, response) {
+    const skip = parseInt(request.query.skip);
     const limit = parseInt(request.query.limit);
     console.log(skip, limit)
-    pool.query('SELECT * FROM match LIMIT $1', [limit], (error, results) => {
+    pool.query(b1_query, [skip*limit, limit], (error, results) => {
       if (error) {
         throw error
       }
@@ -29,18 +34,18 @@ const getMatches = (request, response) => {
     })
   }
   
-const getMatchById = (request, response) => {
+const getMatchById = function (request, response) { //= (request, response) =>
     const id = parseInt(request.params.id)
 
     pool.query('SELECT * FROM match WHERE match_id = $1', [id], (error, results) => {
         if (error) {
-        throw error
+            throw error
         }
         response.status(200).json(results.rows)
     })
 }
   
-  const createUser = (request, response) => {
+  const createUser = function (request, response) {
     const { name, email } = request.body
   
     pool.query('INSERT INTO users (name, email) VALUES ($1, $2)', [name, email], (error, results) => {
