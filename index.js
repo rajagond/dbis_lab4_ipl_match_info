@@ -1,26 +1,11 @@
-const express = require('express');
+const express = require('express')
+const bodyParser = require('body-parser')
+const app = express()
+const db_connect = require('./postgres_db')
+const port = 3000
 require('dotenv').config();
 
-const app = express(),
-      bodyParser = require("body-parser");
-      port = 3001;
-
 //const db_connect = require('./postgres_db.js');
-
-const { Pool } = require('pg');
-const Cursor = require('pg-cursor')
-
-const pool = new Pool({
-    user: process.env.USER_NAME,
-    host: process.env.HOST,
-    database: process.env.DATABASE,
-    password: process.env.USER_PSWD,
-    port: process.env.PORT,
-});
-
-pool.on('error', (err, client) => {
-    console.error('Error:', err);
-});
 
 
 app.use(bodyParser.json());
@@ -36,7 +21,7 @@ app.get('/', function (request,response) {
 
 });
 
-app.use(express.json())
+//app.use(express.json())
 app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -54,3 +39,9 @@ app.get('/matches', function userIdHandler (request, response) {
 app.listen(port, function ()  {
   console.log(`App running on port ${port}.`)
 })
+
+app.get('/match', db_connect.getMatches)
+app.get('/match/:id', db_connect.getMatchById)
+app.post('/users', db_connect.createUser)
+app.put('/users/:id', db_connect.updateUser)
+app.delete('/users/:id', db_connect.deleteUser)
