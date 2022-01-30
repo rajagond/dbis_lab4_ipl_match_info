@@ -1,0 +1,43 @@
+<!--<p>matches works!</p>%
+<p>{{ products | json }}</p> -->
+<div class="container">    
+    <h1> Match INFO </h1>
+<div>
+    <table class="table table-striped">  
+      <thead>  
+          <tr>  
+            <th>match_id</th>
+            <th>season_year</th>
+            <th>team1</th> 
+            <th>team2</th>
+            <th>winner</th>
+            <th>win_type</th>
+            <th>win_margin</th>
+            <th>venue_name</th>
+            <th>city_name</th>
+          </tr>  
+      </thead>  
+      <tbody>  
+        <tr *ngFor="let student of products">  
+          <td>{{ student.match_id }}</td>  
+          <td>{{ student.season_year}}</td>  
+          <td>{{ student.team1 }}</td>  
+          <td>{{ student.team2 }}</td>  
+          <td>{{ student.winner }}</td>  
+          <td>{{ student.win_type }}</td>  
+          <td>{{ student.win_margin }}</td>  
+          <td>{{ student.venue_name }}</td>
+          <td>{{ student.city_name }}</td>  
+        </tr>  
+      </tbody>  
+    </table> 
+    </div>
+  <!--Including the pagination control.-->
+  <div class="text-right">
+    <button class="btn" onclick="next()">next</button>
+  </div> 
+  </div> 
+
+<mat-paginator [pageSize]="10"
+              aria-label="Select page">
+</mat-paginator>
