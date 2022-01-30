@@ -17,8 +17,8 @@ pool.on('error', (err, client) => {
     console.error('Error:', err);
 });
 
-const b1_query = `select match_id, season_year, e.team_name as team1, f.team_name as team2, venue_name, city_name from match
- left join team as e on team1= e.team_id left join team as f on team2 = f.team_id left join venue on match.venue_id = venue.venue_id 
+const b1_query = `select match_id, season_year, e.team_name as team1, f.team_name as team2, g.team_name as winner, win_type, win_margin, venue_name, city_name from match
+ left join team as e on team1= e.team_id left join team as f on team2 = f.team_id left join team as g on match_winner = g.team_id left join venue on match.venue_id = venue.venue_id 
  order by season_year DESC offset $1 limit $2;`
 
 
