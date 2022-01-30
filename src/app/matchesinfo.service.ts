@@ -14,9 +14,13 @@ export class MatchesinfoService {
 
   constructor(private http: HttpClient) { }
 
-  public getData(skip: any, limit: any):Observable <MatchInfo[]>{
-    let queryParams = new HttpParams().append("skip",skip).append("limit",limit);
-    return this.http.get<MatchInfo[]>(this.API_SERVER,{params:queryParams});
+//  public getData(skip: any, limit: any):Observable <MatchInfo[]>{
+  //  let queryParams = new HttpParams().append("skip",skip).append("limit",limit);
+  //  return this.http.get<MatchInfo[]>(this.API_SERVER,{params:queryParams});
+  //}
+  public getData():Observable <MatchInfo[]>{
+    //let queryParams = new HttpParams().append("skip",skip).append("limit",limit);
+    return this.http.get<MatchInfo[]>(this.API_SERVER);
   }
   postData(userData: any) {
     return this.http.post<any>('https://cs251-outlab-6.herokuapp.com/add_new_feedback/',userData)

@@ -1,41 +1,54 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatchInfo } from '../interfaces/match-info';
 import { MatchesinfoService } from '../matchesinfo.service';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-matches',
   templateUrl: './matches.component.html',
   styleUrls: ['./matches.component.css']
 })
-export class MatchesComponent implements OnInit {
+export class MatchesComponent implements OnInit, AfterViewInit {
   products: any[] = [];
-  usersJson: any[] = [];
-  skip: number = 0;
-  limit: number = 10;
+  //skip: number = 0;
+  //limit: number = 10;
+  length = 100;
+  pageSize = 10;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
+  dataSource = new MatTableDataSource<MatchInfo>([]);
+  displayedColumns = [ 'match_id', 'season_year', 'team1', 'team2', 'winner', 'win_type' , 'win_margin' ,'venue_name', 'city_name'];
+
+  @ViewChild(MatPaginator)
+  private paginator!: MatPaginator;
 
   constructor(private infoService: MatchesinfoService) {
 
    }
 
   ngOnInit(): void {
-    this.infoService.getData(this.skip, this.limit).subscribe((data: MatchInfo[])=>{
+    //this.infoService.getData(this.skip, this.limit).subscribe((data: MatchInfo[])=>{
+    this.infoService.getData().subscribe((data: MatchInfo[])=>{
       console.log(data);
       
       this.products = data;
-      this.usersJson = Array.of(this.products);
-      console.log(this.products);
+      this.dataSource.data = data;
+      this.length = data.length
+      console.log(this.length);
     }) 
   }
+  ngAfterViewInit(): void {
+      this.dataSource.paginator = this.paginator;
+  }
 
-  next(){
-    this.skip = this.skip + 1;
-    this.infoService.getData(this.skip, this.limit).subscribe((data: MatchInfo[])=>{
-      console.log(data);
-      
-      this.products = data;
-      this.usersJson = Array.of(this.products);
-      console.log(this.products);
-    }) 
+  // MatPaginator Output
+  // MatPaginator Output
+  //pageEvent: PageEvent = new PageEvent;
+
+  setPageSizeOptions(setPageSizeOptionsInput: string) {
+    if (setPageSizeOptionsInput) {
+      this.pageSizeOptions = setPageSizeOptionsInput.split(',').map(str => +str);
+    }
   }
 
 }

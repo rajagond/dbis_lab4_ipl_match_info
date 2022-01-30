@@ -7,8 +7,9 @@ import { MatchesComponent } from './matches/matches.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { HttpClientModule } from '@angular/common/http';
-import {MatPaginatorModule} from '@angular/material/paginator';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -20,8 +21,9 @@ import { NgxPaginationModule } from 'ngx-pagination';
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    MatPaginatorModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    MatTableModule,
+    MatPaginatorModule
   ],
   providers: [],
   bootstrap: [AppComponent]

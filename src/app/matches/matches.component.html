@@ -1,5 +1,6 @@
 <!--<p>matches works!</p>%
 <p>{{ products | json }}</p> -->
+<!--
 <div class="container">    
     <h1> Match INFO </h1>
 <div>
@@ -32,12 +33,67 @@
       </tbody>  
     </table> 
     </div>
-  <!--Including the pagination control.-->
-  <div class="text-right">
-    <button class="btn" onclick="next()">next</button>
-  </div> 
-  </div> 
+  </div>
+  -->
 
-<mat-paginator [pageSize]="10"
-              aria-label="Select page">
-</mat-paginator>
+
+  <div class="example-container mat-elevation-z8">
+
+    <mat-table [dataSource]="dataSource" >
+  
+      <ng-container matColumnDef="match_id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> match_id </mat-header-cell>
+        <mat-cell *matCellDef="let row "> {{row.match_id}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="season_year">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> season_year </mat-header-cell>
+        <mat-cell *matCellDef="let row "> {{row.season_year}} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="team1">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> team1 </mat-header-cell>
+        <mat-cell *matCellDef="let row" > {{row.team1}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="team2">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> team2 </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.team2}} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="winner">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> winner </mat-header-cell>
+        <mat-cell *matCellDef="let row" > {{row.winner}} </mat-cell>
+      </ng-container>
+            <ng-container matColumnDef="win_type">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> win_type </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.win_type}} </mat-cell>
+      </ng-container>
+  
+      <ng-container matColumnDef="win_margin">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> win_margin </mat-header-cell>
+        <mat-cell *matCellDef="let row" > {{row.win_margin}} </mat-cell>
+      </ng-container>
+            <ng-container matColumnDef="venue_name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> venue_name </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{row.venue_name}} </mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="city_name">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> city_name </mat-header-cell>
+        <mat-cell *matCellDef="let row" > {{row.city_name}} </mat-cell>
+      </ng-container>
+        (page)="pageEvent = $event"
+  
+     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row> 
+      <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row> 
+    </mat-table>
+  
+    <mat-paginator [length]="length"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+        aria-label="Select page">
+    </mat-paginator>
+  </div>
+  
+  
