@@ -39,54 +39,32 @@
 
   <div class="example-container mat-elevation-z8">
 
-    <mat-table [dataSource]="dataSource" >
+    <mat-table [dataSource]="dataSource" class="demo-table" >
+
+      <ng-container matColumnDef="IPL_season">
+        <th mat-header-cell *matHeaderCellDef > IPL_season </th>
+        <td mat-cell *matCellDef="let row " > {{row.season_year}} </td>
+      </ng-container>
   
-      <ng-container matColumnDef="match_id">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> match_id </mat-header-cell>
-        <mat-cell *matCellDef="let row "> {{row.match_id}} </mat-cell>
+      <ng-container matColumnDef="Match_Details">
+        <th mat-header-cell *matHeaderCellDef > Match_Details </th>
+        <td mat-cell *matCellDef="let row ">
+          <a fxFlexFill [routerLink]="'/matches/'+ row.match_id" style="text-decoration: none;" class="mat-row-link">
+            <pre>
+              {{row.team1 + ' VS ' + row.team2}}
+              {{row.venue_name + ', ' + row.city_name}}
+            </pre>
+          </a>
+        </td>
       </ng-container>
 
-      <ng-container matColumnDef="season_year">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> season_year </mat-header-cell>
-        <mat-cell *matCellDef="let row "> {{row.season_year}} </mat-cell>
+      <ng-container matColumnDef="Results">
+        <th mat-header-cell *matHeaderCellDef > Results </th>
+        <td mat-cell *matCellDef="let row "  > {{row.winner + ' won by ' + row.win_margin + " " + row.win_type}}</td>
       </ng-container>
   
-      <ng-container matColumnDef="team1">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> team1 </mat-header-cell>
-        <mat-cell *matCellDef="let row" > {{row.team1}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="team2">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> team2 </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.team2}} </mat-cell>
-      </ng-container>
-  
-      <ng-container matColumnDef="winner">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> winner </mat-header-cell>
-        <mat-cell *matCellDef="let row" > {{row.winner}} </mat-cell>
-      </ng-container>
-            <ng-container matColumnDef="win_type">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> win_type </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.win_type}} </mat-cell>
-      </ng-container>
-  
-      <ng-container matColumnDef="win_margin">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> win_margin </mat-header-cell>
-        <mat-cell *matCellDef="let row" > {{row.win_margin}} </mat-cell>
-      </ng-container>
-            <ng-container matColumnDef="venue_name">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> venue_name </mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{row.venue_name}} </mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="city_name">
-        <mat-header-cell *matHeaderCellDef mat-sort-header> city_name </mat-header-cell>
-        <mat-cell *matCellDef="let row" > {{row.city_name}} </mat-cell>
-      </ng-container>
-        (page)="pageEvent = $event"
-  
-     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row> 
-      <mat-row *matRowDef="let row; columns: displayedColumns"> </mat-row> 
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> 
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"> </tr> 
     </mat-table>
   
     <mat-paginator [length]="length"

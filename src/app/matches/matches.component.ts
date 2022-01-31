@@ -17,7 +17,7 @@ export class MatchesComponent implements OnInit, AfterViewInit {
   pageSize = 10;
   pageSizeOptions: number[] = [5, 10, 25, 100];
   dataSource = new MatTableDataSource<MatchInfo>([]);
-  displayedColumns = [ 'match_id', 'season_year', 'team1', 'team2', 'winner', 'win_type' , 'win_margin' ,'venue_name', 'city_name'];
+  displayedColumns = [ 'IPL_season', 'Match_Details', 'Results'];
 
   @ViewChild(MatPaginator)
   private paginator!: MatPaginator;

@@ -10,11 +10,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatchDetailsComponent } from './match-details/match-details.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MatchesComponent
+    MatchesComponent,
+    MatchDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -23,7 +26,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     HttpClientModule,
     NgxPaginationModule,
     MatTableModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]
