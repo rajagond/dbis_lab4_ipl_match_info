@@ -5,7 +5,7 @@ const db_connect = require('./postgres_db')
 const port = 3000
 require('dotenv').config();
 
-//const db_connect = require('./postgres_db.js');
+const router = require('./routers/index');
 
 
 app.use(bodyParser.json());
@@ -29,12 +29,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.get('/matches', function userIdHandler (request, response) {
-    const skip = request.query.skip;
-    const limit = request.query.limit;
-    console.log(skip, limit);
-    response.send('GET');
-  })
+app.use('/matches', router );
 
 app.listen(port, function ()  {
   console.log(`App running on port ${port}.`)
@@ -42,6 +37,3 @@ app.listen(port, function ()  {
 
 app.get('/match', db_connect.getMatches)
 app.get('/match/:id', db_connect.getMatchById)
-app.post('/users', db_connect.createUser)
-app.put('/users/:id', db_connect.updateUser)
-app.delete('/users/:id', db_connect.deleteUser)

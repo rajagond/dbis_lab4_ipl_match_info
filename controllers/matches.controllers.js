@@ -1,7 +1,5 @@
-const { text } = require('body-parser');
 const { Pool } = require('pg');
 require('dotenv').config();
-const Cursor = require('pg-cursor')
 
 const pool = new Pool({
     user: process.env.USER_NAME,
@@ -19,7 +17,7 @@ pool.on('error', (err, client) => {
 
 const b1_query = `select match_id, season_year, e.team_name as team1, f.team_name as team2, g.team_name as winner, win_type, win_margin, venue_name, city_name from match
  left join team as e on team1= e.team_id left join team as f on team2 = f.team_id left join team as g on match_winner = g.team_id left join venue on match.venue_id = venue.venue_id 
- order by season_year DESC;`
+ order by season_year;`
 
 
 const getMatches = function (request, response) {
@@ -36,7 +34,17 @@ const getMatches = function (request, response) {
   }
   
 const getMatchById = function (request, response) { //= (request, response) =>
-    const id = parseInt(request.params.id)
+    const id = parseInt(request.params.match_id)
+    const inn = parseInt(request.params.inn)
+
+    if (inn == 3){
+        pool.query('SELECT * FROM match WHERE match_id = $1', [id], (error, results) => {
+            if (error) {
+                throw error
+            }
+            response.status(200).json(results.rows)
+        })
+    }
 
     pool.query('SELECT * FROM match WHERE match_id = $1', [id], (error, results) => {
         if (error) {
@@ -46,48 +54,9 @@ const getMatchById = function (request, response) { //= (request, response) =>
     })
 }
   
-  const createUser = function (request, response) {
-    const { name, email } = request.body
-  
-    pool.query('INSERT INTO users (name, email) VALUES ($1, $2)', [name, email], (error, results) => {
-      if (error) {
-        throw error
-      }
-      response.status(201).send(`User added with ID: ${result.insertId}`)
-    })
-  }
-  
-  const updateUser = (request, response) => {
-    const id = parseInt(request.params.id)
-    const { name, email } = request.body
-  
-    pool.query(
-      'UPDATE users SET name = $1, email = $2 WHERE id = $3',
-      [name, email, id],
-      (error, results) => {
-        if (error) {
-          throw error
-        }
-        response.status(200).send(`User modified with ID: ${id}`)
-      }
-    )
-  }
-  
-  const deleteUser = (request, response) => {
-    const id = parseInt(request.params.id)
-  
-    pool.query('DELETE FROM users WHERE id = $1', [id], (error, results) => {
-      if (error) {
-        throw error
-      }
-      response.status(200).send(`User deleted with ID: ${id}`)
-    })
-  }
+
   
   module.exports = {
     getMatches,
     getMatchById,
-    createUser,
-    updateUser,
-    deleteUser,
   }
