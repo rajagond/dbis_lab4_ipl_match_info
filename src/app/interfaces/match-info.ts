@@ -9,3 +9,10 @@ export interface MatchInfo {
     venue_name: String;
     city_name: String;  
 }
+
+export interface BatterInfo {
+    Batter: String;  
+    runs: Number;  
+    fours: Number;  
+    sixes: Number;
+}

@@ -1,0 +1,20 @@
+table {
+    width: 100%;
+  }
+  
+  .mat-column {
+      width: 40%;
+    display: flex;
+    text-align: center;
+  }
+  
+  .mat-column-player_eleven_team1 {
+
+    text-align: center;
+    display: flex;
+  }
+  
+  .mat-column-player_eleven_team2 {
+    display: flex;
+    text-align: center;
+  }
