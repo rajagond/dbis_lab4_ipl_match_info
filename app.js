@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const router_matches = require('./routers/index');
 const router_venue = require('./routers/venue_route');
+const router_player = require('./routers/player_route');
 
 
 app.use(bodyParser.json());
@@ -24,7 +25,7 @@ app.get('/', function (request,response) {
 
 //app.use(express.json())
 app.use(function (req, res, next) {
-  res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Access-Control-Allow-Headers');
   next();
@@ -32,6 +33,7 @@ app.use(function (req, res, next) {
 
 app.use('/matches', router_matches );
 app.use('/venues', router_venue );
+app.use('/players', router_player );
 
 app.listen(port, function ()  {
   console.log(`App running on port ${port}.`)
