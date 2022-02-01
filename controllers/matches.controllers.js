@@ -33,30 +33,173 @@ const getMatches = function (request, response) {
     })
   }
   
-const getMatchById = function (request, response) { //= (request, response) =>
+const getETByMatch_Id = function (request, response) { //= (request, response) =>
     const id = parseInt(request.params.match_id)
     const inn = parseInt(request.params.inn)
-
-    if (inn == 3){
-        pool.query('SELECT * FROM match WHERE match_id = $1', [id], (error, results) => {
-            if (error) {
-                throw error
-            }
-            response.status(200).json(results.rows)
-        })
-    }
-
-    pool.query('SELECT * FROM match WHERE match_id = $1', [id], (error, results) => {
+    pool.query('select sum(extra_runs) as extras, sum(runs_scored + extra_runs) as totals from ball_by_ball where match_id = $1 and innings_no=$2;',
+     [id, inn], (error, results) => {
         if (error) {
             throw error
         }
         response.status(200).json(results.rows)
     })
 }
-  
+
+const getbatsmanByMatch_Id = function (request, response) { //= (request, response) =>
+  const id = parseInt(request.params.match_id)
+  const inn = parseInt(request.params.inn)
+  const query = {
+    text: `SELECT player_id, player_name, runs, fours, sixes, ball_faced 
+    FROM player
+    inner join (
+      SELECT striker, sum(runs_scored)  AS runs, SUM(CASE WHEN runs_scored=4 THEN 1 ELSE 0 END) AS fours,
+      SUM(CASE WHEN runs_scored=6 THEN 1 ELSE 0 END) AS sixes, count(*) ball_faced
+      FROM ball_by_ball
+      WHERE match_id = $1 and innings_no = $2
+      GROUP BY striker) AS matches
+    ON player.player_id = matches.striker
+    ORDER BY runs DESC;`,
+    values: [id, inn],
+  }
+  pool.query(query, (error, results) => {
+      if (error) {
+          throw error
+      }
+      response.status(200).json(results.rows)
+  })
+}
+const getbowlerByMatch_Id = function (request, response) { //= (request, response) =>
+  const id = parseInt(request.params.match_id)
+  const inn = parseInt(request.params.inn)
+  const query = {
+    text: `SELECT player_id, player_name, balls_bowled, runs_given, wickets
+    FROM player
+    inner join (
+      SELECT bowler, sum(runs_scored)  AS runs_given,
+      SUM(CASE WHEN out_type IS NOT NULL AND out_type NOT IN ('run out','retired hurt') THEN 1 ELSE 0 END) AS wickets, count(*) balls_bowled
+      FROM ball_by_ball
+      WHERE match_id = $1 and innings_no = $2
+      GROUP BY bowler) AS matches
+    ON player.player_id = matches.bowler
+    ORDER BY wickets DESC;`,
+    values: [id, inn],
+  }
+  pool.query(query, (error, results) => {
+      if (error) {
+          throw error
+      }
+      response.status(200).json(results.rows)
+  })
+}
+
+const getInningsInfo = (request, response) => {
+  const id = parseInt(request.params.match_id)
+  const inn = parseInt(request.params.inn)
+  const query1 = {
+    text: `SELECT player_id, player_name, runs, fours, sixes, ball_faced 
+    FROM player
+    inner join (
+      SELECT striker, sum(runs_scored)  AS runs, SUM(CASE WHEN runs_scored=4 THEN 1 ELSE 0 END) AS fours,
+      SUM(CASE WHEN runs_scored=6 THEN 1 ELSE 0 END) AS sixes, count(*) ball_faced
+      FROM ball_by_ball
+      WHERE match_id = $1 and innings_no = $2
+      GROUP BY striker) AS matches
+    ON player.player_id = matches.striker
+    ORDER BY runs DESC;`,
+    values: [id, inn],
+  }
+  const query2 = {
+    text: 'select sum(extra_runs) as extras, sum(runs_scored + extra_runs) as totals from ball_by_ball where match_id = $1 and innings_no=$2;',
+    values: [id, inn],
+  }
+  const query3 = {
+    text: `SELECT player_id, player_name, balls_bowled, runs_given, wickets
+    FROM player
+    inner join (
+      SELECT bowler, sum(runs_scored)  AS runs_given,
+      SUM(CASE WHEN out_type IS NOT NULL AND out_type NOT IN ('run out','retired hurt') THEN 1 ELSE 0 END) AS wickets, count(*) balls_bowled
+      FROM ball_by_ball
+      WHERE match_id = $1 and innings_no = $2
+      GROUP BY bowler) AS matches
+    ON player.player_id = matches.bowler
+    ORDER BY wickets DESC;`,
+    values: [id, inn],
+  }
+  pool.query(query1, (error, results1) => {
+    if (error) {
+      throw error
+    }
+    pool.query(query2, (error, results2) => {
+      if (error) {
+        throw error
+      }
+      pool.query(query3, (error, results3) => {
+        if (error) {
+          throw error
+        }
+      response.status(200).json({
+        "batsman": results1.rows,
+        "extra": results2.rows,
+        "bowler": results3.rows
+      })
+    })
+  })
+  })
+}
+const getMatchInfo = (request, response) => {
+  const id = parseInt(request.params.match_id)
+  const query1 = {
+    text: `SELECT match.match_id, season_year, t1.team_name as team1, t2.team_name as team2, t3.team_name as toss, toss_name, venue_name, city_name
+    FROM (SELECT * FROM match WHERE match_id = $1) AS match
+    INNER JOIN team as t1 ON t1.team_id = match.team1
+    INNER JOIN team as t2 ON t2.team_id = match.team2
+    INNER JOIN team as t3 ON t3.team_id = match.toss_winner
+    INNER JOIN venue ON venue.venue_id = match.venue_id;`,
+    values: [id],
+  }
+  const query2 = {
+    text: `SELECT umpire_name, role_desc FROM umpire
+    INNER JOIN (SELECT * FROM umpire_match WHERE match_id = $1) AS ump ON ump.umpire_id = umpire.umpire_id;`,
+    values: [id],
+  }
+  const query3 = {
+    text: `SELECT pm1.player_name AS team1_player, pm2.player_name AS team2_player
+    FROM 
+    ( SELECT *, ROW_NUMBER() OVER () row_num1 FROM (SELECT team1 FROM match WHERE match_id = $1) AS match, (SELECT player_name, team_id FROM player
+    INNER JOIN player_match ON player.player_id = player_match.player_id WHERE match_id=$1) AS p1 WHERE p1.team_id  = match.team1) AS pm1,
+    ( SELECT *, ROW_NUMBER() OVER () row_num2 FROM (SELECT team2 FROM match WHERE match_id = $1) AS match, (SELECT player_name, team_id FROM player
+    INNER JOIN player_match ON player.player_id = player_match.player_id WHERE match_id=$1) AS p2 WHERE p2.team_id  = match.team2) AS pm2
+    WHERE row_num1= row_num2;`,
+    values: [id],
+  }
+  pool.query(query1, (error, results1) => {
+    if (error) {
+      throw error
+    }
+    pool.query(query2, (error, results2) => {
+      if (error) {
+        throw error
+      }
+      pool.query(query3, (error, results3) => {
+        if (error) {
+          throw error
+        }
+      response.status(200).json({
+        "basic_details": results1.rows,
+        "umpire": results2.rows,
+        "playing_eleven": results3.rows
+      })
+    })
+  })
+  })
+}
 
   
   module.exports = {
     getMatches,
-    getMatchById,
+    getETByMatch_Id,
+    getbatsmanByMatch_Id,
+    getbowlerByMatch_Id,
+    getInningsInfo,
+    getMatchInfo
   }
