@@ -5,7 +5,8 @@ const db_connect = require('./postgres_db')
 const port = 3000
 require('dotenv').config();
 
-const router = require('./routers/index');
+const router_matches = require('./routers/index');
+const router_venue = require('./routers/venue_route');
 
 
 app.use(bodyParser.json());
@@ -29,7 +30,8 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use('/matches', router );
+app.use('/matches', router_matches );
+app.use('/venues', router_venue );
 
 app.listen(port, function ()  {
   console.log(`App running on port ${port}.`)

@@ -1,19 +1,4 @@
-const { Pool } = require('pg');
-require('dotenv').config();
-
-const pool = new Pool({
-    user: process.env.USER_NAME,
-    //user: 'postgres',
-    host: process.env.HOST,
-    database: process.env.DATABASE,
-    password: process.env.USER_PSWD,
-    //password: 'postgres',
-    port: process.env.PORT,
-});
-
-pool.on('error', (err, client) => {
-    console.error('Error:', err);
-});
+const pool = require('../database')
 
 const b1_query = `select match_id, season_year, e.team_name as team1, f.team_name as team2, g.team_name as winner, win_type, win_margin, venue_name, city_name from match
  left join team as e on team1= e.team_id left join team as f on team2 = f.team_id left join team as g on match_winner = g.team_id left join venue on match.venue_id = venue.venue_id 
@@ -194,6 +179,32 @@ const getMatchInfo = (request, response) => {
   })
 }
 
+
+const getCumulativeRunByMatch_Id = function (request, response) { //= (request, response) =>
+  const id = parseInt(request.params.match_id)
+  const query = {
+    text: `SELECT inn_stats1.over_id AS i1, inn_stats1.wicket_over AS i1w, SUM(inn_stats1.run_over) OVER ( ORDER BY inn_stats1.over_id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS inn1_cum_run,
+    inn_stats2.over_id AS i2, inn_stats2.wicket_over AS i2w, SUM(inn_stats2.run_over) OVER ( ORDER BY inn_stats2.over_id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS inn2_cum_run
+   FROM
+   (SELECT over_id, SUM(runs_scored + extra_runs) AS run_over, SUM(CASE WHEN out_type IS NOT NULL THEN 1 ELSE 0 END) AS wicket_over
+   FROM ball_by_ball
+   WHERE match_id = $1 AND innings_no =1
+   GROUP BY over_id) AS inn_stats1
+   FULL OUTER JOIN
+   (SELECT over_id, SUM(runs_scored + extra_runs) AS run_over, SUM(CASE WHEN out_type IS NOT NULL THEN 1 ELSE 0 END) AS wicket_over
+   FROM ball_by_ball
+   WHERE match_id = $1 AND innings_no =2
+   GROUP BY over_id) AS inn_stats2
+   ON inn_stats1.over_id = inn_stats2.over_id;`,
+    values: [id],
+  }
+  pool.query(query, (error, results) => {
+      if (error) {
+          throw error
+      }
+      response.status(200).json(results.rows)
+  })
+}
   
   module.exports = {
     getMatches,
@@ -201,5 +212,6 @@ const getMatchInfo = (request, response) => {
     getbatsmanByMatch_Id,
     getbowlerByMatch_Id,
     getInningsInfo,
-    getMatchInfo
+    getMatchInfo,
+    getCumulativeRunByMatch_Id
   }
