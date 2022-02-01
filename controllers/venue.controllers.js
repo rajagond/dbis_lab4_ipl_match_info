@@ -3,9 +3,10 @@ const pool = require('../database')
 const getVenue = function (request, response) {
     pool.query('SELECT venue_id, venue_name, city_name FROM venue;',  (error, results) => {
         if (error) {
-          throw error
+          //throw error
+          response.status(201)
         }
-        response.status(200).json(results.rows)
+        else response.status(200).json(results.rows)
     })
 }
 //venues/:venue_id/basic
@@ -101,9 +102,22 @@ const getVenueGraphInformation = function (request, response) {
         response.status(200).json(results.rows)
     })
 }
+
+const createVenue = (request, response) => {
+    const { venue_name, country_name, city_name, capacity } = request.body
+  
+    pool.query('INSERT INTO venues(venue_name, city_name, country_name, capacity) VALUES ($1, $2, $3, $4)',
+     [parseString(venue_name), parseString(city_name), parseString(country_name), parseInt(capacity)], (error, results) => {
+      if (error) {
+        throw error
+      }
+      response.status(201).send(`Venue Added`)
+    })
+  }
 module.exports = {
     getVenue,
     getVenueInformation,
     getVenuePieChartInformation,
-    getVenueGraphInformation
+    getVenueGraphInformation,
+    createVenue
 }
