@@ -8,6 +8,7 @@ require('dotenv').config();
 const router_matches = require('./routers/index');
 const router_venue = require('./routers/venue_route');
 const router_player = require('./routers/player_route');
+const router_pointstable = require('./routers/points_table');
 
 
 app.use(bodyParser.json());
@@ -34,6 +35,7 @@ app.use(function (req, res, next) {
 app.use('/matches', router_matches );
 app.use('/venues', router_venue );
 app.use('/players', router_player );
+app.use('/pointstable', router_pointstable );
 
 app.listen(port, function ()  {
   console.log(`App running on port ${port}.`)
