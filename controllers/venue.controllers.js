@@ -1,7 +1,7 @@
 const pool = require('../database')
 
 const getVenue = function (request, response) {
-    pool.query('SELECT venue_id, venue_name, city_name FROM venue;',  (error, results) => {
+    pool.query('SELECT venue_id, venue_name, city_name, country_name FROM venue;',  (error, results) => {
         if (error) {
           //throw error
           response.status(201)
@@ -13,7 +13,7 @@ const getVenue = function (request, response) {
 const getVenueInformation = function (request, response) {
     const venue_id = parseInt(request.params.venue_id)
     const query1 = {
-        text: `SELECT venue_name, city_name, capacity FROM venue WHERE venue_id = $1;`,
+        text: `SELECT venue_name, city_name, country_name, capacity FROM venue WHERE venue_id = $1;`,
         values: [venue_id],
     }
     const query2 = {
