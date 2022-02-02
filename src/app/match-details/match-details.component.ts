@@ -27,11 +27,11 @@ export class MatchDetailsComponent implements OnInit {
   link!: string | null;
 
   constructor(private route:ActivatedRoute, private service: MatchesDetailsService ) { 
-    if(this.route.snapshot.paramMap.get('match_id'))
-      this.link = this.route.snapshot.paramMap.get('match_id');
   }
 
   ngOnInit(): void {
+    if(this.route.snapshot.paramMap.get('match_id'))
+      this.link = this.route.snapshot.paramMap.get('match_id');
     this.service.getData(this.link + '/1').subscribe((data: any)=>{
       console.log(data.batsman);
       this.dataSource1.data = data.batsman;

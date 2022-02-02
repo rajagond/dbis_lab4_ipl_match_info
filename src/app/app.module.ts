@@ -12,12 +12,14 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatchDetailsComponent } from './match-details/match-details.component';
 import { RouterModule } from '@angular/router';
+import { PointstableComponent } from './pointstable/pointstable.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MatchesComponent,
-    MatchDetailsComponent
+    MatchDetailsComponent,
+    PointstableComponent
   ],
   imports: [
     BrowserModule,
