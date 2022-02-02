@@ -13,6 +13,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatchDetailsComponent } from './match-details/match-details.component';
 import { RouterModule } from '@angular/router';
 import { PointstableComponent } from './pointstable/pointstable.component';
+import { MatTabsModule } from '@angular/material/tabs'
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { PointstableComponent } from './pointstable/pointstable.component';
     NgxPaginationModule,
     MatTableModule,
     MatPaginatorModule,
-    RouterModule
+    RouterModule,
+    MatTabsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
