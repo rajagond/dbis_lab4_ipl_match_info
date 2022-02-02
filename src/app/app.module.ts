@@ -13,14 +13,19 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatchDetailsComponent } from './match-details/match-details.component';
 import { RouterModule } from '@angular/router';
 import { PointstableComponent } from './pointstable/pointstable.component';
-import { MatTabsModule } from '@angular/material/tabs'
+import { MatTabsModule } from '@angular/material/tabs';
+import { VenuesComponent } from './venues/venues.component';
+import { VenueDetailsComponent } from './venue-details/venue-details.component';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
     AppComponent,
     MatchesComponent,
     MatchDetailsComponent,
-    PointstableComponent
+    PointstableComponent,
+    VenuesComponent,
+    VenueDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +36,8 @@ import { MatTabsModule } from '@angular/material/tabs'
     MatTableModule,
     MatPaginatorModule,
     RouterModule,
-    MatTabsModule
+    MatTabsModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]
