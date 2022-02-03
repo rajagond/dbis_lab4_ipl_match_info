@@ -17,6 +17,12 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { VenuesComponent } from './venues/venues.component';
 import { VenueDetailsComponent } from './venue-details/venue-details.component';
 import { MatCardModule } from '@angular/material/card';
+import { NgChartsModule } from 'ng2-charts';
+import { 
+	IgxPieChartModule,
+	IgxLegendModule,
+	IgxItemLegendModule
+ } from "igniteui-angular-charts";
 
 @NgModule({
   declarations: [
@@ -37,7 +43,11 @@ import { MatCardModule } from '@angular/material/card';
     MatPaginatorModule,
     RouterModule,
     MatTabsModule,
-    MatCardModule
+    MatCardModule,
+    NgChartsModule,
+  	IgxPieChartModule,
+    IgxLegendModule,
+    IgxItemLegendModule
   ],
   providers: [],
   bootstrap: [AppComponent]
