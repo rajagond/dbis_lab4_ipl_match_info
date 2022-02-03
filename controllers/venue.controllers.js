@@ -101,13 +101,11 @@ const getVenueInformation = function (request, response) {
 const getVenuePieChartInformation = function (request, response) {
     const venue_id = parseInt(request.params.venue_id)
     const query = {
-        text: `SELECT (first_won*1.0*100.0/total) AS first, (second_won*1.0*100.0/total) as second, (tie*1.0*100.0/total) as draw
-        FROM (SELECT COALESCE(SUM(CASE WHEN win_type = 'runs' THEN 1 ELSE 0 END), 0) AS first_won,
-        COALESCE(SUM(CASE WHEN win_type = 'wickets' THEN 1 ELSE 0 END), 0) AS second_won,
-        COALESCE(SUM(CASE WHEN win_type NOT IN ('runs', 'wickets') THEN 1 ELSE 0 END), 0) AS tie,
-        COALESCE (count(*), 0) AS total
+        text: `SELECT COALESCE(SUM(CASE WHEN win_type = 'runs' THEN 1 ELSE 0 END), 0) AS first,
+        COALESCE(SUM(CASE WHEN win_type = 'wickets' THEN 1 ELSE 0 END), 0) AS second,
+        COALESCE(SUM(CASE WHEN win_type NOT IN ('runs', 'wickets') THEN 1 ELSE 0 END), 0) AS draw
         FROM match 
-        WHERE venue_id = $1) AS abc;`,
+        WHERE venue_id = $1;`,
         values: [venue_id],
     }
     pool.query(query,  (error, results) => {

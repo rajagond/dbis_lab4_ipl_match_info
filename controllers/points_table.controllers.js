@@ -35,9 +35,11 @@ const getPointsTable = function (request, response) {
         values: [year],
     }
     pool.query(query,  (error, results) => {
+    	console.log(error);
         if (error) {
           //throw error
-          response.status(201)
+          console.log(error.toString());
+          response.status(200).json({"error": "something bad happen"});
         }
         else response.status(200).json(results.rows);
     })
