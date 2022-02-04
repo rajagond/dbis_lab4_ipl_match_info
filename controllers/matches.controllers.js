@@ -211,12 +211,13 @@ const getCumulativeRunByMatch_Id = function (req, res, next) { //= (req, res, ne
   const id = parseInt(req.params.match_id)
   const inn = parseInt(req.params.inn)
   const query = {
-    text: `SELECT over_id, ball_id, wicket_over, SUM(runs_scored + extra_runs) OVER ( ORDER BY inn_stats1.over_id ASC, ball_id ASC ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cum_run
+    text: `SELECT over_id, wicket_over, SUM(run_over) OVER ( ORDER BY inn_stats1.over_id ASC ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cum_run
     FROM
-    (SELECT over_id,ball_id,runs_scored, extra_runs, (CASE WHEN out_type IS NOT NULL THEN 1 ELSE 0 END) AS wicket_over
+    (SELECT over_id, SUM(runs_scored + extra_runs) AS run_over, SUM(CASE WHEN out_type IS NOT NULL THEN 1 ELSE 0 END) AS wicket_over
     FROM ball_by_ball
-    WHERE match_id = $1 AND innings_no = $2) AS inn_stats1
-    ORDER BY over_id, ball_id;`,
+    WHERE match_id = $1 AND innings_no = $2
+    GROUP BY match_id, innings_no, over_id) AS inn_stats1
+    ORDER BY over_id;`,
     values: [id, inn],
   }
   pool.query(query, (error, results) => {

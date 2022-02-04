@@ -1,4 +1,3 @@
-const { text } = require('body-parser');
 const { Pool } = require('pg');
 require('dotenv').config();
 const Cursor = require('pg-cursor')

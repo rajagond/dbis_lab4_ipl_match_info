@@ -44,8 +44,8 @@ app.get('/', function (req,res) {
   res.json({ info: 'Node.js, Express, and Postgres API' })
 
 });
-app.get('/match', db_connect.getMatches)
-app.get('/match/:id', db_connect.getMatchById)
+//app.get('/match', db_connect.getMatches)
+//app.get('/match/:id', db_connect.getMatchById)
 
 app.use((req, res, next) => {
   const error = new Error('Not Found!');

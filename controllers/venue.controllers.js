@@ -123,7 +123,7 @@ const getVenueGraphInformation = function (req, res, next) {
         FROM
         (SELECT season_year, match_id
         FROM match 
-        WHERE venue_id = 11 AND season_year IN (2011, 2013, 2015, 2017)) AS t1
+        WHERE venue_id = $1 AND season_year IN (2011, 2013, 2015, 2017)) AS t1
         LEFT JOIN
         (SELECT match_id, SUM(runs_scored + extra_runs) AS run
         FROM ball_by_ball
