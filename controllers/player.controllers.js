@@ -1,18 +1,18 @@
 const pool = require('../database')
 
-const getPlayer = function (request, response) {
-    const id = parseInt(request.params.player_id)
+const getPlayer = function (req, res, next) {
+    const id = parseInt(req.params.player_id)
     pool.query('SELECT player_name, country_name, batting_hand, bowling_skill FROM player WHERE player_id = $1;', [id],
       (error, results) => {
         if (error) {
-          throw error
+          next(error)
         }
-        response.status(200).json(results.rows)
+        res.status(200).json(results.rows)
     })
 }
 //players/:player_id/batdetails
-const getPlayerDetails = function (request, response) {
-    const player_id = parseInt(request.params.player_id)
+const getPlayerDetails = function (req, res, next) {
+    const player_id = parseInt(req.params.player_id)
     const query1 = {
       text: `SELECT COUNT(DISTINCT match_id) AS num_matches
       FROM ball_by_ball
@@ -40,17 +40,17 @@ const getPlayerDetails = function (request, response) {
     }
     pool.query(query1, (error, results1) => {
         if (error) {
-          throw error
+          next(error)
         }
         pool.query(query2, (error, results2) => {
           if (error) {
-            throw error
+            next(error)
           }
           pool.query(query3, (error, results3) => {
             if (error) {
-              throw error
+              next(error)
             }
-          response.status(200).json({
+          res.status(200).json({
             "num_matches": results1.rows,
             "other_details": results2.rows,
             "high_fifties": results3.rows
@@ -60,8 +60,8 @@ const getPlayerDetails = function (request, response) {
       })
 }
 //players/:player_id/batgraphinfo
-const getPlayerInformationInGraph = function (request, response) {
-    const player_id = parseInt(request.params.player_id)
+const getPlayerInformationInGraph = function (req, res, next) {
+    const player_id = parseInt(req.params.player_id)
     const query = {
       text: `SELECT match_id, SUM(runs_scored) AS match_score
       FROM ball_by_ball
@@ -72,16 +72,16 @@ const getPlayerInformationInGraph = function (request, response) {
     }
     pool.query(query, (error, results) => {
         if (error) {
-            throw error
+          next(error)
         }
-        response.status(200).json(results.rows)
+        res.status(200).json(results.rows)
     })
 }
 
 
 //players/:player_id/bowldetails
-const getBowlingDetails = function (request, response) {
-    const player_id = parseInt(request.params.player_id)
+const getBowlingDetails = function (req, res, next) {
+    const player_id = parseInt(req.params.player_id)
     const query1 = {
       text: `SELECT COUNT(DISTINCT match_id) AS num_matches
       FROM ball_by_ball
@@ -108,17 +108,17 @@ const getBowlingDetails = function (request, response) {
     }
     pool.query(query1, (error, results1) => {
         if (error) {
-          throw error
+          next(error)
         }
         pool.query(query2, (error, results2) => {
           if (error) {
-            throw error
+            next(error)
           }
           pool.query(query3, (error, results3) => {
             if (error) {
-              throw error
+              next(error)
             }
-          response.status(200).json({
+          res.status(200).json({
             "num_matches": results1.rows,
             "other_details": results2.rows,
             "fives_overs_bowled": results3.rows
@@ -128,8 +128,8 @@ const getBowlingDetails = function (request, response) {
       })
 }
 //players/:player_id/bowlgraphinfo
-const getBowlingInformationInGraph = function (request, response) {
-    const player_id = parseInt(request.params.player_id)
+const getBowlingInformationInGraph = function (req, res, next) {
+    const player_id = parseInt(req.params.player_id)
     const query = {
       text: `SELECT match_id, SUM(CASE WHEN out_type IS NOT NULL AND out_type <> 'retired_hurt' AND out_type <> 'run_out' THEN 1 ELSE 0 END) AS wickets, SUM(runs_scored) AS runs_conceded
       FROM ball_by_ball
@@ -140,9 +140,9 @@ const getBowlingInformationInGraph = function (request, response) {
     }
     pool.query(query, (error, results) => {
         if (error) {
-            throw error
+          next(error)
         }
-        response.status(200).json(results.rows)
+        res.status(200).json(results.rows)
     })
 }
 

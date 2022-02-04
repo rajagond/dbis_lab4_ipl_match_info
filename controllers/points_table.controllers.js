@@ -2,8 +2,8 @@ const pool = require('../database')
 
 /*
 //pointstable/:year
-const getPointsTable = function (request, response) {
-    const year = parseInt(request.params.year);
+const getPointsTable = function (req, res, next) {
+    const year = parseInt(req.params.year);
     const query = {
         text: `SELECT *, abc.won*2 AS pts
         FROM
@@ -38,11 +38,11 @@ const getPointsTable = function (request, response) {
     pool.query(query,  (error, results) => {
     	console.log(error);
         if (error) {
-          //throw error
+          //next(error)
           console.log(error.toString());
-          response.status(200).json({"error": "something bad happen"});
+          res.status(200).json({"error": "something bad happen"});
         }
-        else response.status(200).json(results.rows);
+        else res.status(200).json(results.rows);
     })
 }
 
@@ -50,8 +50,8 @@ const getPointsTable = function (request, response) {
 
 
 //pointstable/:year
-const getPointsTable = function (request, response) {
-    const year = parseInt(request.params.year);
+const getPointsTable = function (req, res, next) {
+    const year = parseInt(req.params.year);
     const query = {
         text: `SELECT team_id, team_name, mat, won, loss, tied, (apna_score*1.0/apna_over - uska_score*1.0/uska_over) AS nrr, abc.won*2 AS pts
 	FROM
@@ -96,13 +96,11 @@ const getPointsTable = function (request, response) {
         values: [year],
     }
     pool.query(query,  (error, results) => {
-    	console.log(error);
+    	//console.log(error);
         if (error) {
-          //throw error
-          console.log(error.toString());
-          response.status(200).json({"error": "something bad happen"});
+          next(error)
         }
-        else response.status(200).json(results.rows);
+        else res.status(200).json(results.rows);
     })
 }
 

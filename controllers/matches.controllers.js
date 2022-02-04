@@ -1,4 +1,3 @@
-const { query } = require('express')
 const pool = require('../database')
 
 const b1_query = `select match_id, season_year, e.team_name as team1, f.team_name as team2, g.team_name as winner, win_type, win_margin, venue_name, city_name from match
@@ -6,34 +5,34 @@ const b1_query = `select match_id, season_year, e.team_name as team1, f.team_nam
  order by season_year;`
 
 
-const getMatches = function (request, response) {
-    //const skip = parseInt(request.query.skip);
-    //const limit = parseInt(request.query.limit);
+const getMatches = function (req, res, next) {
+    //const skip = parseInt(req.query.skip);
+    //const limit = parseInt(req.query.limit);
     //console.log(skip, limit)
     //pool.query(b1_query, [skip*limit, limit], (error, results) => {
     pool.query(b1_query,  (error, results) => {
       if (error) {
-        throw error
+        next(error)
       }
-      response.status(200).json(results.rows)
+      res.status(200).json(results.rows)
     })
   }
   
-const getETByMatch_Id = function (request, response) { //= (request, response) =>
-    const id = parseInt(request.params.match_id)
-    const inn = parseInt(request.params.inn)
+const getETByMatch_Id = function (req, res, next) { //= (req, res, next) =>
+    const id = parseInt(req.params.match_id)
+    const inn = parseInt(req.params.inn)
     pool.query('select sum(extra_runs) as extras, sum(runs_scored + extra_runs) as totals from ball_by_ball where match_id = $1 and innings_no=$2;',
      [id, inn], (error, results) => {
         if (error) {
-            throw error
+            next(error)
         }
-        response.status(200).json(results.rows)
+        res.status(200).json(results.rows)
     })
 }
 
-const getbatsmanByMatch_Id = function (request, response) { //= (request, response) =>
-  const id = parseInt(request.params.match_id)
-  const inn = parseInt(request.params.inn)
+const getbatsmanByMatch_Id = function (req, res, next) { //= (req, res, next) =>
+  const id = parseInt(req.params.match_id)
+  const inn = parseInt(req.params.inn)
   const query = {
     text: `SELECT player_id, player_name, runs, fours, sixes, ball_faced 
     FROM player
@@ -49,14 +48,14 @@ const getbatsmanByMatch_Id = function (request, response) { //= (request, respon
   }
   pool.query(query, (error, results) => {
       if (error) {
-          throw error
+          next(error)
       }
-      response.status(200).json(results.rows)
+      res.status(200).json(results.rows)
   })
 }
-const getbowlerByMatch_Id = function (request, response) { //= (request, response) =>
-  const id = parseInt(request.params.match_id)
-  const inn = parseInt(request.params.inn)
+const getbowlerByMatch_Id = function (req, res, next) { //= (req, res, next) =>
+  const id = parseInt(req.params.match_id)
+  const inn = parseInt(req.params.inn)
   const query = {
     text: `SELECT player_id, player_name, balls_bowled, runs_given, wickets
     FROM player
@@ -72,15 +71,15 @@ const getbowlerByMatch_Id = function (request, response) { //= (request, respons
   }
   pool.query(query, (error, results) => {
       if (error) {
-          throw error
+          next(error)
       }
-      response.status(200).json(results.rows)
+      res.status(200).json(results.rows)
   })
 }
 
-const getInningsInfo = (request, response) => {
-  const id = parseInt(request.params.match_id)
-  const inn = parseInt(request.params.inn)
+const getInningsInfo = (req, res, next) => {
+  const id = parseInt(req.params.match_id)
+  const inn = parseInt(req.params.inn)
   const query1 = {
     text: `SELECT player_id, player_name, runs, fours, sixes, ball_faced 
     FROM player
@@ -113,17 +112,17 @@ const getInningsInfo = (request, response) => {
   }
   pool.query(query1, (error, results1) => {
     if (error) {
-      throw error
+      next(error)
     }
     pool.query(query2, (error, results2) => {
       if (error) {
-        throw error
+        next(error)
       }
       pool.query(query3, (error, results3) => {
         if (error) {
-          throw error
+          next(error)
         }
-      response.status(200).json({
+      res.status(200).json({
         "batsman": results1.rows,
         "extra": results2.rows,
         "bowler": results3.rows
@@ -132,8 +131,8 @@ const getInningsInfo = (request, response) => {
   })
   })
 }
-const getMatchInfo = (request, response) => {
-  const id = parseInt(request.params.match_id)
+const getMatchInfo = (req, res, next) => {
+  const id = parseInt(req.params.match_id)
   const query1 = {
     text: `SELECT match.match_id, season_year, t1.team_name as team1, t2.team_name as team2, t3.team_name as toss, toss_name, venue_name, city_name
     FROM (SELECT * FROM match WHERE match_id = $1) AS match
@@ -160,17 +159,17 @@ const getMatchInfo = (request, response) => {
   }
   pool.query(query1, (error, results1) => {
     if (error) {
-      throw error
+      next(error)
     }
     pool.query(query2, (error, results2) => {
       if (error) {
-        throw error
+        next(error)
       }
       pool.query(query3, (error, results3) => {
         if (error) {
-          throw error
+          next(error)
         }
-      response.status(200).json({
+      res.status(200).json({
         "basic_details": results1.rows,
         "umpire": results2.rows,
         "playing_eleven": results3.rows
@@ -180,9 +179,9 @@ const getMatchInfo = (request, response) => {
   })
 }
 
-
-const getCumulativeRunByMatch_Id = function (request, response) { //= (request, response) =>
-  const id = parseInt(request.params.match_id)
+/*
+const getCumulativeRunByMatch_Id = function (req, res, next) { //= (req, res, next) =>
+  const id = parseInt(req.params.match_id)
   const query = {
     text: `SELECT inn_stats1.over_id AS i1, inn_stats1.wicket_over AS i1w, SUM(inn_stats1.run_over) OVER ( ORDER BY inn_stats1.over_id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS inn1_cum_run,
     inn_stats2.over_id AS i2, inn_stats2.wicket_over AS i2w, SUM(inn_stats2.run_over) OVER ( ORDER BY inn_stats2.over_id ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS inn2_cum_run
@@ -201,38 +200,61 @@ const getCumulativeRunByMatch_Id = function (request, response) { //= (request, 
   }
   pool.query(query, (error, results) => {
       if (error) {
-          throw error
+          next(error)
       }
-      response.status(200).json(results.rows)
+      res.status(200).json(results.rows)
+  })
+}*/
+
+//
+const getCumulativeRunByMatch_Id = function (req, res, next) { //= (req, res, next) =>
+  const id = parseInt(req.params.match_id)
+  const inn = parseInt(req.params.inn)
+  const query = {
+    text: `SELECT over_id, ball_id, wicket_over, SUM(runs_scored + extra_runs) OVER ( ORDER BY inn_stats1.over_id ASC, ball_id ASC ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS cum_run
+    FROM
+    (SELECT over_id,ball_id,runs_scored, extra_runs, (CASE WHEN out_type IS NOT NULL THEN 1 ELSE 0 END) AS wicket_over
+    FROM ball_by_ball
+    WHERE match_id = $1 AND innings_no = $2) AS inn_stats1
+    ORDER BY over_id, ball_id;`,
+    values: [id, inn],
+  }
+  pool.query(query, (error, results) => {
+      if (error) {
+          next(error)
+      }
+      res.status(200).json(results.rows)
   })
 }
 
-const getMatchBasicByMatch_Id = function (request, response) { //= (request, response) =>
-  const id = parseInt(request.params.match_id)
+
+
+const getMatchBasicByMatch_Id = function (req, res, next) { //= (req, res, next) =>
+  const id = parseInt(req.params.match_id)
   const query = {
-    text: `SELECT match.match_id, season_year, team1_total, team1_wickets, team1_over, team2_total, team2_wickets, team2_over
+    text: `SELECT match.match_id, season_year, inn1_total, nn1_wickets, inn1_over, inn2_total, inn2_wickets, inn2_over
     FROM (SELECT match_id, season_year FROM match WHERE match_id = $1) AS match
-    INNER JOIN (SELECT match_id, SUM(runs_scored + extra_runs) AS team1_total, SUM(CASE WHEN out_type IS NOT NULL THEN 1 ELSE 0 END) AS team1_wickets,
-        COUNT(DISTINCT over_id) AS team1_over
+    INNER JOIN (SELECT match_id, SUM(runs_scored + extra_runs) AS inn1_total, SUM(CASE WHEN out_type IS NOT NULL THEN 1 ELSE 0 END) AS inn1_wickets,
+        COUNT(DISTINCT over_id) AS inn1_over
         FROM ball_by_ball WHERE match_id = $1 AND innings_no = 1 GROUP BY match_id) AS BI
     ON match.match_id = BI.match_id
-    INNER JOIN (SELECT match_id, SUM(runs_scored + extra_runs) AS team2_total, SUM(CASE WHEN out_type IS NOT NULL THEN 1 ELSE 0 END) AS team2_wickets,
-        COUNT(DISTINCT over_id) AS team2_over
+    INNER JOIN (SELECT match_id, SUM(runs_scored + extra_runs) AS inn2_total, SUM(CASE WHEN out_type IS NOT NULL THEN 1 ELSE 0 END) AS inn2_wickets,
+        COUNT(DISTINCT over_id) AS inn2_over
         FROM ball_by_ball WHERE match_id = $1 AND innings_no = 2 GROUP BY match_id) AS DI
     ON match.match_id = DI.match_id;`,
     values: [id],
   }
   pool.query(query, (error, results) => {
       if (error) {
-          throw error
+          next(error)
       }
-      response.status(200).json(results.rows)
+      res.status(200).json(results.rows)
   })
 }
 
-const getMatchAdvancedByMatch_Id = function (request, response) { //= (request, response) =>
-  const id = parseInt(request.params.match_id)
-  const inn = parseInt(request.params.inn)
+const getMatchAdvancedByMatch_Id = function (req, res, next) { //= (req, res, next) =>
+  const id = parseInt(req.params.match_id)
+  const inn = parseInt(req.params.inn)
   const query = {
     text: `SELECT batsman, runs, ball_faced, bowler, runs_given, wickets, over_bowled
     FROM
@@ -264,15 +286,15 @@ const getMatchAdvancedByMatch_Id = function (request, response) { //= (request, 
   }
   pool.query(query, (error, results) => {
       if (error) {
-          throw error
+          next(error)
       }
-      response.status(200).json(results.rows)
+      res.status(200).json(results.rows)
   })
 }
 
-const getNumRunsInningsWise = function (request, response) { //= (request, response) =>
-  const id = parseInt(request.params.match_id)
-  const inn = parseInt(request.params.inn)
+const getNumRunsInningsWise = function (req, res, next) { //= (req, res, next) =>
+  const id = parseInt(req.params.match_id)
+  const inn = parseInt(req.params.inn)
   const query = {
     text: `SELECT match_id, innings_no, SUM (runs_scored + extra_runs) AS runs, SUM(extra_runs) AS extras, SUM(CASE WHEN runs_scored = 1 THEN 1 ELSE 0 END) AS ones,
     SUM(CASE WHEN runs_scored = 2 THEN 2 ELSE 0 END) AS twos, SUM(CASE WHEN runs_scored = 3 THEN 3 ELSE 0 END) AS threes, 
@@ -284,11 +306,50 @@ const getNumRunsInningsWise = function (request, response) { //= (request, respo
   }
   pool.query(query, (error, results) => {
       if (error) {
-          throw error
+          next(error)
       }
-      response.status(200).json(results.rows)
+      res.status(200).json(results.rows)
   })
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+// matches/:match_id/team
+const getInningTeamByMatch_Id = function (req, res, next) { //= (req, res, next) =>
+  const id = parseInt(req.params.match_id)
+  const query = {
+    text: `SELECT match_id, inn1, e.team_name AS inn1_team, inn2, f.team_name AS inn2_team
+    FROM
+    (select match_id, (CASE WHEN ((team1, toss_name) = (toss_winner, 'bat')) OR (team1 <> toss_winner AND toss_name = 'field') THEN team1 ELSE team2 END ) AS inn1, (CASE WHEN ((team1, toss_name) = (toss_winner, 'field')) OR (team1 <> toss_winner AND toss_name = 'bat') THEN team1 ELSE team2 END ) AS inn2
+    FROM match WHERE match_id=$1) AS mat
+    INNER JOIN team AS e
+    ON e.team_id = inn1
+    INNER JOIN team AS f
+    ON f.team_id = inn2;`,
+    values: [id],
+  }
+  pool.query(query, (error, results) => {
+      if (error) {
+          next(error)
+      }
+      res.status(200).json(results.rows)
+  })
+}
+
+
+
+
+
   
   module.exports = {
     getMatches,
@@ -300,5 +361,6 @@ const getNumRunsInningsWise = function (request, response) { //= (request, respo
     getCumulativeRunByMatch_Id,
     getMatchBasicByMatch_Id,
     getMatchAdvancedByMatch_Id,
-    getNumRunsInningsWise
+    getNumRunsInningsWise,
+    getInningTeamByMatch_Id
   }

@@ -18,11 +18,11 @@ app.use(
     })
   )
 
-app.get('/', function (request,response) {
-    //response.send('App Works !!!!');
-    response.json({ info: 'Node.js, Express, and Postgres API' })
+app.listen(port, function ()  {
+  console.log(`App running on port ${port}.`)
+})
 
-});
+
 
 //app.use(express.json())
 app.use(function (req, res, next) {
@@ -37,9 +37,27 @@ app.use('/venues', router_venue );
 app.use('/players', router_player );
 app.use('/pointstable', router_pointstable );
 
-app.listen(port, function ()  {
-  console.log(`App running on port ${port}.`)
-})
 
+
+app.get('/', function (req,res) {
+  //res.send('App Works !!!!');
+  res.json({ info: 'Node.js, Express, and Postgres API' })
+
+});
 app.get('/match', db_connect.getMatches)
 app.get('/match/:id', db_connect.getMatchById)
+
+app.use((req, res, next) => {
+  const error = new Error('Not Found!');
+  error.status = 404;
+  next(error);
+});
+
+app.use((error, req, res, next) => {
+  res.status(error.status || 500);
+  res.json({
+    error: {
+      message: error.message,
+    },
+  });
+});

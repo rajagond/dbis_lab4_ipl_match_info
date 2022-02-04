@@ -1,18 +1,18 @@
 const pool = require('../database')
 
-const getVenue = function (request, response) {
+const getVenue = function (req, res, next) {
     pool.query('SELECT venue_id, venue_name, city_name, country_name FROM venue;',  (error, results) => {
         if (error) {
           //throw error
-          response.status(201)
+          next(error)
         }
-        else response.status(200).json(results.rows)
+        else res.status(200).json(results.rows)
     })
 }
 /*
 //venues/:venue_id/basic
-const getVenueInformation = function (request, response) {
-    const venue_id = parseInt(request.params.venue_id)
+const getVenueInformation = function (req, res, next) {
+    const venue_id = parseInt(req.params.venue_id)
     const query1 = {
         text: `SELECT venue_name, city_name, country_name, capacity FROM venue WHERE venue_id = $1;`,
         values: [venue_id],
@@ -40,7 +40,7 @@ const getVenueInformation = function (request, response) {
     }
     pool.query(query1, (error, results1) => {
         if (error) {
-          throw error
+          next(error)
         }
         pool.query(query2, (error, results2) => {
           if (error) {
@@ -50,7 +50,7 @@ const getVenueInformation = function (request, response) {
             if (error) {
               throw error
             }
-          response.status(200).json({
+          res.status(200).json({
             "basic": results1.rows,
             "match_high_low": results2.rows,
             "runs_chased": results3.rows
@@ -61,8 +61,8 @@ const getVenueInformation = function (request, response) {
 }
 */
 //venues/:venue_id/basic
-const getVenueInformation = function (request, response) {
-    const venue_id = parseInt(request.params.venue_id)
+const getVenueInformation = function (req, res, next) {
+    const venue_id = parseInt(req.params.venue_id)
     const query = {
         text: `SELECT venue_name, city_name, country_name, capacity, num_matches, high, low, runs_chased
 		FROM (SELECT venue_name, city_name, country_name, capacity, venue_id FROM venue WHERE venue_id = $1) AS a
@@ -91,15 +91,15 @@ const getVenueInformation = function (request, response) {
     }
     pool.query(query, (error, results) => {
         if (error) {
-          throw error
+          next(error)
         }
-        response.status(200).json(results.rows)
+        res.status(200).json(results.rows)
     })
 }
 
 //venues/:venue_id/pie_chart
-const getVenuePieChartInformation = function (request, response) {
-    const venue_id = parseInt(request.params.venue_id)
+const getVenuePieChartInformation = function (req, res, next) {
+    const venue_id = parseInt(req.params.venue_id)
     const query = {
         text: `SELECT COALESCE(SUM(CASE WHEN win_type = 'runs' THEN 1 ELSE 0 END), 0) AS first,
         COALESCE(SUM(CASE WHEN win_type = 'wickets' THEN 1 ELSE 0 END), 0) AS second,
@@ -110,14 +110,14 @@ const getVenuePieChartInformation = function (request, response) {
     }
     pool.query(query,  (error, results) => {
         if (error) {
-          throw error
+          next(error)
         }
-        response.status(200).json(results.rows)
+        res.status(200).json(results.rows)
     })
 }
 //venues/:venue_id/graph
-const getVenueGraphInformation = function (request, response) {
-    const venue_id = parseInt(request.params.venue_id)
+const getVenueGraphInformation = function (req, res, next) {
+    const venue_id = parseInt(req.params.venue_id)
     const query = {
         text: `SELECT season_year, AVG(run)
         FROM
@@ -135,21 +135,21 @@ const getVenueGraphInformation = function (request, response) {
     }
     pool.query(query,  (error, results) => {
         if (error) {
-          throw error
+          next(error)
         }
-        response.status(200).json(results.rows)
+        res.status(200).json(results.rows)
     })
 }
 
-const createVenue = (request, response) => {
-    const { venue_name, country_name, city_name, capacity } = request.body
+const createVenue = (req, res, next) => {
+    const { venue_name, country_name, city_name, capacity } = req.body
   
     pool.query('INSERT INTO venues(venue_name, city_name, country_name, capacity) VALUES ($1, $2, $3, $4)',
      [parseString(venue_name), parseString(city_name), parseString(country_name), parseInt(capacity)], (error, results) => {
       if (error) {
         throw error
       }
-      response.status(201).send(`Venue Added`)
+      res.status(201).send(`Venue Added`)
     })
   }
 module.exports = {
