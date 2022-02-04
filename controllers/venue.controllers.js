@@ -119,7 +119,7 @@ const getVenuePieChartInformation = function (req, res, next) {
 const getVenueGraphInformation = function (req, res, next) {
     const venue_id = parseInt(req.params.venue_id)
     const query = {
-        text: `SELECT season_year, AVG(run)
+        text: `SELECT season_year, AVG(run) as avg
         FROM
         (SELECT season_year, match_id
         FROM match 
