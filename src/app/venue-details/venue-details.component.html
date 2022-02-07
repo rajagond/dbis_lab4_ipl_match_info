@@ -1,54 +1,49 @@
-<!-- <p>venue-details works!</p>
-<p>{{dataSourcex | json }}</p> -->
 <div *ngFor="let data of dataSourcex">
     <mat-card class="example-card center">
-    <mat-card-header>
-        <mat-card-title>{{ data?.venue_name }}</mat-card-title>
-        <mat-card-subtitle>{{ data?.city_name   + ', ' + data?.country_name }}</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-    <table >
-        <tr>
-            <th>Capacity:</th>
-            <td>{{data?.capacity }}</td>
-        </tr>
-        <tr>
-            <th>Total matches played:</th>
-            <td>{{data?.num_matches }}</td>
-        </tr>
-        <tr>
-            <th>Highest total recorded:</th>
-            <td>{{data?.high }}</td>
-        </tr>
-        <tr>
-            <th>Lowest total recorded:</th>
-            <td>{{data?.low }}</td>
-        </tr>
-        <tr>
-            <th>Highest score chased:</th>
-            <td>{{data?.runs_chased }}</td>
-        </tr>
-    </table>
-    </mat-card-content>
-    <mat-card-footer>
-        Basic Information
-    </mat-card-footer>
+        <mat-card-header>
+            <mat-card-title>{{ data?.venue_name }}</mat-card-title>
+            <mat-card-subtitle>{{ data?.city_name + ', ' + data?.country_name }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <table>
+                <tr>
+                    <th>Capacity:</th>
+                    <td>{{data?.capacity }}</td>
+                </tr>
+                <tr>
+                    <th>Total matches played:</th>
+                    <td>{{data?.num_matches }}</td>
+                </tr>
+                <tr>
+                    <th>Highest total recorded:</th>
+                    <td>{{data?.high }}</td>
+                </tr>
+                <tr>
+                    <th>Lowest total recorded:</th>
+                    <td>{{data?.low }}</td>
+                </tr>
+                <tr>
+                    <th>Highest score chased:</th>
+                    <td>{{data?.runs_chased }}</td>
+                </tr>
+            </table>
+        </mat-card-content>
+        <mat-card-footer>
+            Basic Information
+        </mat-card-footer>
     </mat-card>
+</div>
+
+<div *ngIf="num_mat > 0 " class="chart">
+    <div style="display: block;">
+        <canvas baseChart [datasets]="pieChartData" [type]="pieChartType" [plugins]="pieChartPlugins" [labels]="pieLabel" [legend]="true" [options]="pieChartOptions">
+        </canvas>
     </div>
-    
-    
-    
-    
-    
-    
-    
-    <div class="chart">
-    <canvas baseChart
-            [datasets]="pieChartData"
-            [type]="pieChartType"
-            [plugins]="pieChartPlugins"
-            [labels]="pieLabel"
-            [legend]="true"
-            [options]="pieChartOptions">
-    </canvas>
+</div>
+
+
+<div *ngIf="num_mat > 0 " class="chart">
+    <div style="display: block;">
+        <canvas baseChart [datasets]="lineChartData" [options]="lineChartOptions" [type]="lineChartType" [legend]="true" [labels]="lineLabel"></canvas>
     </div>
+</div>

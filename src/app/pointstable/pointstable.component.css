@@ -2,21 +2,21 @@
     width: 40%;
     margin-left: auto;
     margin-right: auto;
-  }
+}
 
-  th.mat-header-cell {
+th.mat-header-cell {
     text-align: left !important;
-  }
+}
 
-  td.mat-cell {
+td.mat-cell {
     text-align: left !important;
-  }
+}
 
-  caption { 
+caption {
     display: table-caption;
     text-align: center;
     color: black;
     font-size: medium;
     font-weight: bold;
     font-family: Tahoma, sans-serif;
-  }
+}

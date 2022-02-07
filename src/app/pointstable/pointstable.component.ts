@@ -56,18 +56,14 @@ export class PointstableComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(params => {
-      if(params.get('year')) this.year = params.get('year') as string ;
+      if (params.get('year')) this.year = params.get('year') as string;
     });
     this.getTableFromService();
   }
 
-  private getTableFromService(){
-    this.getService.getPointstable(this.year).subscribe((data: Pointstable[])=>{
-      console.log(data);
+  private getTableFromService() {
+    this.getService.getPointstable(this.year).subscribe((data: Pointstable[]) => {
       this.dataSource.data = data;
-      console.log(this.dataSource.data);
-      console.log(this.columns);
-      console.log(this.displayedColumns);
-    }) 
+    })
   }
 }

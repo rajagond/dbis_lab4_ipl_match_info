@@ -3,17 +3,14 @@ table {
 }
 
 .mat-column-IPL_season {
-  width: 30%;
   border-right: 1px solid currentColor;
   text-align: center;
 }
 
 .mat-column-Match_Details {
-  width: 50%;
   text-align: center;
 }
 
 .mat-column-Results {
-  width: 50%;
   text-align: center;
 }

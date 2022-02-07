@@ -21,11 +21,7 @@ export class VenuesComponent implements OnInit {
 
   private getTableFromService(){
     this.getService.getVenues().subscribe((data: Venues[])=>{
-      console.log(data);
       this.dataSource.data = data;
-      console.log(this.dataSource.data);
-      console.log(this.displayedColumns);
     }) 
   }
-
 }

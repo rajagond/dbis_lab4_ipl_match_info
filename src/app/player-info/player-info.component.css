@@ -1,0 +1,43 @@
+.playerBasic {
+    align-items: center;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 400;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.batDet {
+    align-items: center;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.bowlDet {
+    align-items: center;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.example-card {
+    max-width: fit-content;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 60px;
+    padding-right: 60px;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+th {
+    text-align: left;
+}
+
+td {
+    text-align: center;
+}

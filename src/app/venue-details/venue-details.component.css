@@ -3,26 +3,27 @@
     align-items: center;
     margin-left: auto;
     margin-right: auto;
-  }
-  
-  th {
-      text-align: left;
-  }
-  td {
-      text-align: center;
-  }
+}
 
-  caption { 
+th {
+    text-align: left;
+}
+
+td {
+    text-align: center;
+}
+
+caption {
     display: table-caption;
     text-align: center;
     font-size: medium;
     font-weight: bold;
     font-family: Tahoma, sans-serif;
-  }
+}
 
-  .chart {
+.chart {
     max-width: 30%;
     align-items: center;
     margin-left: auto;
     margin-right: auto;
-  }
+}

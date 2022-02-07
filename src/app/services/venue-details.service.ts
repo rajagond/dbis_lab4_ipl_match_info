@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
-import { VenueDetails, Venuepie } from '../interfaces/venues';
+import { VenueDetails, Venueline, Venuepie } from '../interfaces/venues';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +28,12 @@ export class VenueDetailsService {
         catchError(this.handleError)
       );
   }
+  public getLineGraphDetails(venue_id: string): Observable<Venueline[]> {
+    return this.httpClient.get<Venueline[]>(this.basicUrl + venue_id + '/graph')
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
       // A client-side or network error occurred. Handle it accordingly.
@@ -39,7 +45,8 @@ export class VenueDetailsService {
         `Backend returned code ${error.status}, body was: `, error.error);
     }
     // Return an observable with a user-facing error message.
-    return throwError('Something bad happened; please try again later.');
+    return throwError( () =>
+  new Error('Something bad happened; please try again later.'));
   }
 
 }

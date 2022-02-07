@@ -1,0 +1,31 @@
+<mat-grid-list cols="2">
+    <h1> Welcome To CS387 Lab 4</h1>
+    <mat-grid-tile>
+        <div class="split left">
+            <mat-card class="mat-card" (click)="navigatevenues()">
+                <mat-card-header>
+                    <mat-card-title>Venues</mat-card-title>
+                    <mat-card-subtitle>IPL venues information</mat-card-subtitle>
+                </mat-card-header>
+                <img mat-card-image src="https://images.unsplash.com/photo-1594470117722-de4b9a02ebed?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2029&q=80" alt="Photo Venue">
+                <mat-card-actions>
+                    <button mat-raised-button color="primary" [routerLink]="['/venues']" [routerLinkActive]="['active']">Visit</button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </mat-grid-tile>
+    <mat-grid-tile>
+        <div class="split right">
+            <mat-card class="mat-card" (click)="navigatematches()">
+                <mat-card-header>
+                    <mat-card-title>Matches</mat-card-title>
+                    <mat-card-subtitle>IPL matches information</mat-card-subtitle>
+                </mat-card-header>
+                <img mat-card-image src="https://media.istockphoto.com/photos/cricket-batsman-hitting-ball-during-cricket-match-in-stadium-picture-id519665528?b=1&k=20&m=519665528&s=170667a&w=0&h=uU3UgD9q0S3TDshBGvTrkPUKw7nOVNP6PkK_swV-GGc=" alt="Photo of Matches">
+                <mat-card-actions>
+                    <button mat-raised-button color="primary" [routerLink]="['/matches']" [routerLinkActive]="['active']">Visit</button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </mat-grid-tile>
+</mat-grid-list>

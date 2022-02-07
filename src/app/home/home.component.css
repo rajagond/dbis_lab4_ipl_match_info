@@ -1,0 +1,16 @@
+h1 {
+    text-align: center;
+}
+
+.left {
+    width: 90%;
+}
+
+.right {
+    width: 90%;
+}
+
+#chart {
+    max-width: 70%;
+    margin: 35px auto;
+}
