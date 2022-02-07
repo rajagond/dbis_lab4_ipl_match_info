@@ -1,0 +1,78 @@
+.demo-table {
+    width: 40%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+th.mat-header-cell {
+    text-align: left !important;
+}
+
+td.mat-cell {
+    text-align: left !important;
+}
+
+#TeamName {
+    font-size: 16pt;
+    font-weight: bold;
+    color: darkblue;
+}
+
+#overs {
+    font-size: 12pt;
+    font-weight: 200;
+}
+
+#hiddenHeader {
+    display: None;
+}
+
+#idyear {
+    font-size: 12pt;
+    font-weight: 600;
+}
+
+#TopHead {
+    font-size: 16pt;
+    font-weight: 700;
+}
+
+.summary-table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.summary-table td.mat-cell {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 80px;
+}
+
+.SummHead {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    padding: 10px;
+}
+
+#chart {
+    max-width: 650px;
+    margin: 35px auto;
+}
+
+#pchart {
+    max-width: 100%;
+    margin: 35px auto;
+    padding: 0;
+}
+
+.mat-grid-list {
+    margin-top: -40px;
+}
+
+.example-card {
+    max-width: fit-content;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}

@@ -1,0 +1,16 @@
+table {
+  width: 100%;
+}
+
+.mat-column-IPL_season {
+  border-right: 1px solid currentColor;
+  text-align: center;
+}
+
+.mat-column-Match_Details {
+  text-align: center;
+}
+
+.mat-column-Results {
+  text-align: center;
+}

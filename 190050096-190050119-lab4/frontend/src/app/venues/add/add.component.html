@@ -1,0 +1,39 @@
+<div style="margin-left: auto; margin-right: auto; width: 50%;">
+    <mat-card>
+        <mat-card-title style="margin-left: 35%; margin-right: 35%;"> Add New Venue</mat-card-title>
+        <mat-card-content>
+            <form [formGroup]="venueaddForm" (ngSubmit)="OnSubmit()">
+                <div class="form-groups">
+                    <mat-form-field color="accent">
+                        <input matInput placeholder="Venue Name" formControlName="venue_name" required>
+                        <mat-error *ngIf="venueaddForm.controls['venue_name'].invalid">{{getErrorMessage('venue_name')}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="form-groups">
+                    <mat-form-field color="accent">
+                        <input matInput placeholder="City Name" formControlName="city_name" required>
+                        <mat-error *ngIf="venueaddForm.controls['city_name'].invalid">{{getErrorMessage('city_name')}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="form-groups">
+                    <mat-form-field color="accent">
+                        <input matInput placeholder="Country Name" formControlName="country_name" required>
+                        <mat-error *ngIf="venueaddForm.controls['country_name'].invalid">{{getErrorMessage('country_name')}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-groups">
+                    <mat-form-field color="accent">
+                        <input matInput placeholder="Capacity" formControlName="capacity" required>
+                        <mat-error *ngIf="venueaddForm.controls['capacity'].invalid">{{getErrorMessage('capacity')}}</mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="button">
+                    <button mat-raised-button color="primary" type="submit" [disabled]="!venueaddForm.valid">Submit</button>
+                </div>
+
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

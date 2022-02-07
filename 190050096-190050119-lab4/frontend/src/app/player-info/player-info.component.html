@@ -1,0 +1,129 @@
+<div class="playerBasic">
+    <mat-card class="example-card center">
+        <mat-card-header>
+            <mat-card-title>Basic Information</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <table>
+                <tr>
+                    <th>Number of Matches:</th>
+                    <td>{{playerBasic?.player_name}}</td>
+                </tr>
+                <tr>
+                    <th>Country: </th>
+                    <td> {{playerBasic?.country_name}} </td>
+                </tr>
+                <tr>
+                    <th>Batting Style: </th>
+                    <td>{{ playerBasic?.batting_hand}}</td>
+                </tr>
+                <tr>
+                    <th>Bowling Skill: </th>
+                    <td>{{playerBasic?.bowling_skill}}</td>
+                </tr>
+            </table>
+        </mat-card-content>
+    </mat-card>
+
+</div>
+
+<div class="batDet">
+
+    <mat-card class="example-card center">
+        <mat-card-header>
+            <mat-card-title>Batting Statistics</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <table>
+                <tr>
+                    <th>Number of Matches:</th>
+                    <td>{{playerBat.num_matches}}</td>
+                </tr>
+                <tr>
+                    <th>Total Runs Scored:</th>
+                    <td> {{playerBat.total_score}} </td>
+                </tr>
+                <tr>
+                    <th>Runs Scored in Fours:</th>
+                    <td>{{playerBat.fours}}</td>
+                </tr>
+                <tr>
+                    <th>Runs Scored in Sixes:</th>
+                    <td>{{playerBat.sixes}}</td>
+                </tr>
+                <tr>
+                    <th>Number of Fifties: </th>
+                    <td>{{playerBat.fifties}}</td>
+                </tr>
+                <tr>
+                    <th>Highest Score: </th>
+                    <td> {{playerBat.high_score}} </td>
+                </tr>
+                <tr>
+                    <th>Strike Rate: </th>
+                    <td> {{playerBat.strike_rate}} </td>
+                </tr>
+                <tr>
+                    <th>Average: </th>
+                    <td> {{playerBat.average}} </td>
+                </tr>
+            </table>
+        </mat-card-content>
+    </mat-card>
+
+</div>
+
+<div *ngIf="playerBat.num_matches > 0 && chartOptions" id="chart">
+    <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [dataLabels]="chartOptions.dataLabels" [plotOptions]="chartOptions.plotOptions" [yaxis]="chartOptions.yaxis" [legend]="chartOptions.legend" [fill]="chartOptions.fill" [stroke]="chartOptions.stroke"
+        [xaxis]="chartOptions.xaxis" [title]="chartOptions.title">
+    </apx-chart>
+</div>
+
+
+
+<div class="bowlDet">
+
+    <mat-card class="example-card center">
+        <mat-card-header>
+            <mat-card-title>Bowling Statistics</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <table>
+                <tr>
+                    <th>Number of Matches:</th>
+                    <td>{{playerBowl.num_matches}}</td>
+                </tr>
+                <tr>
+                    <th>Runs Conceded:</th>
+                    <td> {{playerBowl.runs}} </td>
+                </tr>
+                <tr>
+                    <th>Balls Bowled:</th>
+                    <td>{{playerBowl.balls}}</td>
+                </tr>
+                <tr>
+                    <th> Overs Bowled:</th>
+                    <td>{{playerBowl.overs}}</td>
+                </tr>
+                <tr>
+                    <th>Wickets: </th>
+                    <td> {{playerBowl.wickets}}</td>
+                </tr>
+                <tr>
+                    <th>Economy: </th>
+                    <td> {{playerBowl.eco}}</td>
+                </tr>
+                <tr>
+                    <th>Five Wickets: </th>
+                    <td> {{playerBowl.fives}}</td>
+                </tr>
+            </table>
+        </mat-card-content>
+    </mat-card>
+
+</div>
+
+<div *ngIf="playerBowl.num_matches > 0 && chartOptions_b " id="chart">
+    <apx-chart [series]="chartOptions_b.series" [chart]="chartOptions_b.chart" [yaxis]="chartOptions_b.yaxis" [xaxis]="chartOptions_b.xaxis" [labels]="chartOptions_b.labels" [stroke]="chartOptions_b.stroke" [title]="chartOptions_b.title" [dataLabels]="chartOptions_b.dataLabels"
+        [fill]="chartOptions_b.fill" [tooltip]="chartOptions_b.tooltip"></apx-chart>
+</div>

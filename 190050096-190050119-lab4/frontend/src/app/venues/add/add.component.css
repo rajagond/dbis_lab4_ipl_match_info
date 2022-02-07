@@ -1,0 +1,19 @@
+.form .mat-form-field+.mat-form-field {
+    margin-left: 8px;
+}
+
+.mat-form-field {
+    font-size: 16px;
+    flex-grow: 1;
+    padding-top: 10px;
+    padding-left: 10%;
+    padding-bottom: 5px;
+    padding-right: 10%;
+    width: 75%;
+}
+
+.button {
+    width: 10%;
+    margin-left: 40%;
+    margin-right: 40%;
+}
