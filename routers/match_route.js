@@ -4,7 +4,6 @@ const ctrMatches = require('../controllers/matches.controllers');
 
 router.get('/', ctrMatches.getMatches);
 router.get('/:match_id/team', ctrMatches.getInningTeamByMatch_Id);
-router.get('/ET/:match_id/:inn', ctrMatches.getETByMatch_Id);
 router.get('/batsman/:match_id/:inn', ctrMatches.getbatsmanByMatch_Id);
 router.get('/bowler/:match_id/:inn', ctrMatches.getbowlerByMatch_Id);
 router.get('/match_info/:match_id/:inn', ctrMatches.getInningsInfo);
